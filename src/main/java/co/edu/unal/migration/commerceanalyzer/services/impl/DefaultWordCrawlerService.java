@@ -160,7 +160,11 @@ public class DefaultWordCrawlerService implements WordCrawlerService {
                 lineNumbers.add(lineNumber);
                 occurrences.put(oracleKey, lineNumbers);
                 if (shouldReplaceLines) {
-                    replacedLine = StringUtils.replaceAll(replacedLine, oracleKey, databaseProperties.getProperty(oracleKey));
+                    String sqlServerKeyword = databaseProperties.getProperty(oracleKey);
+                    // If is empty or the same keyword shouldn't be replaced
+                    if(StringUtils.isNotBlank(sqlServerKeyword) && !StringUtils.equalsIgnoreCase(sqlServerKeyword, oracleKey)){
+                        replacedLine = StringUtils.replaceAll(replacedLine, oracleKey, sqlServerKeyword);
+                    }
                     //line = line.replace(oracleKey, oracleConfig.getOracleProperties().getProperty(oracleKey));
                 }
             }
