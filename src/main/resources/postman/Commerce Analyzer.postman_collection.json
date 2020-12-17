@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "4ffa1405-f38d-424f-8c56-6eae23f21f61",
-		"name": "Proyecto TALP",
+		"name": "Commerce Analyzer",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -11,12 +11,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/",
+					"raw": "{{host}}/analyzer",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						""
+						"analyzer"
 					]
 				}
 			},
@@ -28,11 +28,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/java-files",
+					"raw": "{{host}}/analyzer/java-files",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
+						"analyzer",
 						"java-files"
 					]
 				}
@@ -45,11 +46,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/oracle-properties",
+					"raw": "{{host}}/analyzer/oracle-properties",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
+						"analyzer",
 						"oracle-properties"
 					]
 				}
