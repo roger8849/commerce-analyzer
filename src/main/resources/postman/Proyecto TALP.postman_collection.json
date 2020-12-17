@@ -1,0 +1,119 @@
+{
+	"info": {
+		"_postman_id": "4ffa1405-f38d-424f-8c56-6eae23f21f61",
+		"name": "Proyecto TALP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Root test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Java files",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/java-files",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"java-files"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Oracle properties load",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/oracle-properties",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"oracle-properties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FindOracleProperties",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/analyzer/find-oracle-keywords?shouldReplaceText=false&database=Oracle",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"analyzer",
+						"find-oracle-keywords"
+					],
+					"query": [
+						{
+							"key": "shouldReplaceText",
+							"value": "false"
+						},
+						{
+							"key": "database",
+							"value": "Oracle"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sensitive - Generate files",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/sensitive/generate-properties",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"sensitive",
+						"generate-properties"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
