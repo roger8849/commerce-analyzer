@@ -34,7 +34,7 @@ public class DefaultWordCrawlerService implements WordCrawlerService {
     private Environment environment;
 
     @Override
-    public Set<WordFound> findOracleKeysInJavaFiles(WordCrawlerInputParams wordCrawlerInputParams) throws IOException {
+    public Set<WordFound> findOracleKeysInJavaFiles(WordCrawlerInputParams wordCrawlerInputParams) {
         Set<WordFound> wordFoundSet = new HashSet<>();
         Set<String> javaFilesPaths = this.listJavaFilesFromRootDirectory();
         for (String javaFilePath : javaFilesPaths) {
@@ -120,7 +120,7 @@ public class DefaultWordCrawlerService implements WordCrawlerService {
         return wordFound;
     }
 
-    private WordFound searchInJavaFile(WordFound wordFound, File javaFile, boolean shouldReplaceLines) throws IOException {
+    private WordFound searchInJavaFile(WordFound wordFound, File javaFile, boolean shouldReplaceLines) {
         try {
             Path javaPathFile = Paths.get(javaFile.getAbsolutePath());
             List<String> lines = Files.readAllLines(javaPathFile);
@@ -143,7 +143,6 @@ public class DefaultWordCrawlerService implements WordCrawlerService {
             }
         } catch (IOException e) {
             LOG.error("Error processing the file with path: {}" , javaFile);
-            throw e;
         }
 
         return wordFound;

@@ -43,7 +43,7 @@ public class CommerceAnalyzerController {
     }
 
     @RequestMapping("/find-oracle-keywords")
-    public ResponseEntity<Set<WordFound>> findOracleKeywords(@Valid WordCrawlerInputParams wordCrawlerInputParams) throws IOException{
+    public ResponseEntity<Set<WordFound>> findOracleKeywords(@Valid WordCrawlerInputParams wordCrawlerInputParams){
         return ResponseEntity.ok(wordCrawlerService.findOracleKeysInJavaFiles(wordCrawlerInputParams));
     }
 }
