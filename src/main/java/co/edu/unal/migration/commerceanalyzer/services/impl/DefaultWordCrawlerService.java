@@ -121,25 +121,31 @@ public class DefaultWordCrawlerService implements WordCrawlerService {
     }
 
     private WordFound searchInJavaFile(WordFound wordFound, File javaFile, boolean shouldReplaceLines) throws IOException {
-        Path javaPathFile = Paths.get(javaFile.getAbsolutePath());
-        List<String> lines = Files.readAllLines(javaPathFile);
-        List<String> replacedLines = null;
-        if (shouldReplaceLines) {
-            replacedLines = new ArrayList<>();
-        }
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            Map<String, List<Integer>> occurrences = wordFound.getWordsFound();
-            if (MapUtils.isEmpty(occurrences)) {
-                occurrences = new HashMap<>();
+        try {
+            Path javaPathFile = Paths.get(javaFile.getAbsolutePath());
+            List<String> lines = Files.readAllLines(javaPathFile);
+            List<String> replacedLines = null;
+            if (shouldReplaceLines) {
+                replacedLines = new ArrayList<>();
             }
-            occurrences = searchOracleKeysInLine(occurrences, line, i + 1, replacedLines);
-            wordFound.setWordsFound(occurrences);
-        }
-        if (shouldReplaceLines && !CollectionUtils.isEqualCollection(lines, replacedLines)) {
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                Map<String, List<Integer>> occurrences = wordFound.getWordsFound();
+                if (MapUtils.isEmpty(occurrences)) {
+                    occurrences = new HashMap<>();
+                }
+                occurrences = searchOracleKeysInLine(occurrences, line, i + 1, replacedLines);
+                wordFound.setWordsFound(occurrences);
+            }
+            if (shouldReplaceLines && !CollectionUtils.isEqualCollection(lines, replacedLines)) {
 //        if (wasReplaced) {
-            Files.write(javaPathFile, replacedLines, Charset.forName("UTF-8"));
+                Files.write(javaPathFile, replacedLines, Charset.forName("UTF-8"));
+            }
+        } catch (IOException e) {
+            LOG.error("Error processing the file with path: {}" , javaFile);
+            throw e;
         }
+
         return wordFound;
     }
 
