@@ -11,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -142,7 +145,7 @@ public class DefaultWordCrawlerService implements WordCrawlerService {
                 Files.write(javaPathFile, replacedLines, Charset.forName("UTF-8"));
             }
         } catch (IOException e) {
-            LOG.error("Error processing the file with path: {}" , javaFile);
+            LOG.error("Error processing the file with path: {}", javaFile);
         }
 
         return wordFound;
@@ -156,27 +159,46 @@ public class DefaultWordCrawlerService implements WordCrawlerService {
         String replacedLine = line;
         boolean shouldReplaceLines = Objects.nonNull(replacedLines);
         for (String oracleKey : oracleKeys) {
-            if (StringUtils.contains(replacedLine, oracleKey)) {
+            if (StringUtils.contains(replacedLine, ""+oracleKey+"")) {
                 //If the list is empty
                 List<Integer> lineNumbers = occurrences.get(oracleKey);
                 if (CollectionUtils.isEmpty(lineNumbers)) {
                     lineNumbers = new ArrayList<>();
                 }
-                lineNumbers.add(lineNumber);
-                occurrences.put(oracleKey, lineNumbers);
-                if (shouldReplaceLines) {
-                    String sqlServerKeyword = databaseProperties.getProperty(oracleKey);
-                    // If is empty or the same keyword shouldn't be replaced
-                    if(StringUtils.isNotBlank(sqlServerKeyword) && !StringUtils.equalsIgnoreCase(sqlServerKeyword, oracleKey)){
-                        replacedLine = StringUtils.replaceAll(replacedLine, oracleKey, sqlServerKeyword);
+                if (!isFalsePositive(line, oracleKey)) {
+                    lineNumbers.add(lineNumber);
+                    occurrences.put(oracleKey, lineNumbers);
+                    if (shouldReplaceLines) {
+                        String sqlServerKeyword = databaseProperties.getProperty(oracleKey);
+                        // If is empty or the same keyword shouldn't be replaced
+                        if (StringUtils.isNotBlank(sqlServerKeyword) && !StringUtils.equalsIgnoreCase(sqlServerKeyword, oracleKey)) {
+                            replacedLine = StringUtils.replaceAll(replacedLine, oracleKey, sqlServerKeyword);
+                        }
+                        //line = line.replace(oracleKey, oracleConfig.getOracleProperties().getProperty(oracleKey));
                     }
-                    //line = line.replace(oracleKey, oracleConfig.getOracleProperties().getProperty(oracleKey));
                 }
             }
         }
-        if(shouldReplaceLines){
+        if (shouldReplaceLines) {
             replacedLines.add(replacedLine);
         }
         return occurrences;
+    }
+
+    private boolean isFalsePositive(String line, String oracleKey) throws IOException {
+        String databaseResourceName = ORACLE_IGNORE_PROPERTIES;
+        Resource resource = new ClassPathResource(databaseResourceName);
+        Properties props = PropertiesLoaderUtils.loadProperties(resource);
+        Set<String> oracleKeysToIgnore = props.keySet().stream().map(Object::toString).collect(Collectors.toSet());
+        for (String oracleKeyToIgnore : oracleKeysToIgnore) {
+            if (props.getProperty(oracleKey) != null) {
+                String[] falsePositives = props.getProperty(oracleKey).split(",");
+                for (String falsePositive : falsePositives) {
+                    if (StringUtils.contains(line,falsePositive))
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 }

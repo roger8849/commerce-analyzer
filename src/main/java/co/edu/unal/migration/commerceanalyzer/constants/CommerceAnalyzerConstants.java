@@ -12,4 +12,6 @@ public class CommerceAnalyzerConstants {
     public static final String MYSQL_PROPERTIES = "mysql.properties";
     public static final String ORACLE = "oracle";
     public static final String MYSQL = "mysql";
+
+    public static final String ORACLE_IGNORE_PROPERTIES = "oracle-ignore.properties";
 }
