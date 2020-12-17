@@ -159,7 +159,7 @@ public class DefaultWordCrawlerService implements WordCrawlerService {
         String replacedLine = line;
         boolean shouldReplaceLines = Objects.nonNull(replacedLines);
         for (String oracleKey : oracleKeys) {
-            if (StringUtils.contains(replacedLine, ""+oracleKey+"")) {
+            if (StringUtils.contains(replacedLine, oracleKey)) {
                 //If the list is empty
                 List<Integer> lineNumbers = occurrences.get(oracleKey);
                 if (CollectionUtils.isEmpty(lineNumbers)) {
